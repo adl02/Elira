@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,18 +31,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.R
 import com.howtokaise.elira.presentation.viewmodel.AuthViewmodel
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier, authViewmodel: AuthViewmodel = viewModel()) {
+fun SignupScreen(modifier: Modifier = Modifier, navController: NavController , authViewmodel: AuthViewmodel = viewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var isLoading by remember { mutableStateOf(false) }
 
     var context = LocalContext.current
 
@@ -115,19 +119,29 @@ fun SignupScreen(modifier: Modifier = Modifier, authViewmodel: AuthViewmodel = v
 
         Button(
             onClick = {
+                isLoading = true
                 authViewmodel.signup(email,name,password){success, errorMessage->
                     if (success){
-
+                        isLoading = false
+                        navController.navigate("home"){
+                            popUpTo("auth"){inclusive = true}
+                        }
                     }else{
+                        isLoading = false
                         AppUtil.showToast(context,errorMessage?: "Something went wrong")
                     }
                 }
             },
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
         ) {
-            Text("Signup",fontSize = 20.sp)
+            if (isLoading){
+                CircularProgressIndicator()
+            }else{
+                Text("Signup",fontSize = 20.sp)
+            }
         }
     }
 }
