@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -28,17 +29,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.R
+import com.howtokaise.elira.presentation.viewmodel.AuthViewmodel
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier) {
+fun SignupScreen(modifier: Modifier = Modifier, authViewmodel: AuthViewmodel = viewModel()) {
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
     var email by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    var context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -109,7 +114,15 @@ fun SignupScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                authViewmodel.signup(email,name,password){success, errorMessage->
+                    if (success){
+
+                    }else{
+                        AppUtil.showToast(context,errorMessage?: "Something went wrong")
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
