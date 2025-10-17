@@ -10,7 +10,7 @@ import com.google.firebase.auth.auth
 import com.howtokaise.elira.presentation.authentication.AuthScreen
 import com.howtokaise.elira.presentation.authentication.LoginScreen
 import com.howtokaise.elira.presentation.authentication.SignupScreen
-import com.howtokaise.elira.presentation.homescreen.HomeScreen
+import com.howtokaise.elira.presentation.navigationbar.HomeScreen
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
