@@ -2,6 +2,7 @@ package com.howtokaise.elira.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,11 +12,13 @@ import com.howtokaise.elira.presentation.authentication.AuthScreen
 import com.howtokaise.elira.presentation.authentication.LoginScreen
 import com.howtokaise.elira.presentation.authentication.SignupScreen
 import com.howtokaise.elira.presentation.navigationbar.HomeScreen
+import com.howtokaise.elira.presentation.page.CategoryProductsPage
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
+    GlobalNavigation.navController = navController
     val isLoggedIn = Firebase.auth.currentUser!=null
     val firstPage = if (isLoggedIn) "home" else "auth"
 
@@ -36,5 +39,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable("home"){
             HomeScreen(modifier,navController)
         }
+
+        composable("category-products/{categoryId}"){
+            var categoryId = it.arguments?.getString("categoryId")
+            CategoryProductsPage(modifier,categoryId?:"")
+        }
     }
+}
+
+
+object GlobalNavigation{
+    lateinit var navController : NavHostController
 }
