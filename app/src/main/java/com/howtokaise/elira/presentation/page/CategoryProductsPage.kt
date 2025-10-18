@@ -1,5 +1,6 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,9 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.model.ProductModel
+import com.howtokaise.elira.presentation.components.ProductItemView
 
 @Composable
-fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId : String) {
+fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId: String) {
 
     val productList = remember { mutableStateOf<List<ProductModel>>(emptyList()) }
 
@@ -26,7 +28,7 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId : String) {
         Firebase.firestore.collection("data")
             .document("stock")
             .collection("products")
-            .whereEqualTo("category",categoryId)
+            .whereEqualTo("category", categoryId)
             .get().addOnCompleteListener {
                 if (it.isSuccessful) {
                     val resultList = it.result.documents.mapNotNull { doc ->
@@ -38,12 +40,19 @@ fun CategoryProductsPage(modifier: Modifier = Modifier, categoryId : String) {
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(productList.value){item ->
-            Text(text = item.title)
-            Spacer(modifier = Modifier.height(20.dp))
+        items(productList.value.chunked(2)) {rowItems ->
+            Row {
+                rowItems.forEach {
+                    ProductItemView(product = it, modifier = Modifier.weight(1f))
+                }
+                if (rowItems.size == 1){
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         }
     }
 }
