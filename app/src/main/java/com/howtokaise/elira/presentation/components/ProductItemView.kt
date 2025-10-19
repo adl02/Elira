@@ -1,5 +1,6 @@
 package com.howtokaise.elira.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,13 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.howtokaise.elira.model.ProductModel
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
 
     Card(
         modifier = modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                GlobalNavigation.navController.navigate("product-details/"+product.id)
+            },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)

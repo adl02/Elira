@@ -13,6 +13,7 @@ import com.howtokaise.elira.presentation.authentication.LoginScreen
 import com.howtokaise.elira.presentation.authentication.SignupScreen
 import com.howtokaise.elira.presentation.navigationbar.HomeScreen
 import com.howtokaise.elira.presentation.page.CategoryProductsPage
+import com.howtokaise.elira.presentation.page.ProductDetailsPage
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
@@ -43,6 +44,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable("category-products/{categoryId}"){
             var categoryId = it.arguments?.getString("categoryId")
             CategoryProductsPage(modifier,categoryId?:"")
+        }
+
+        composable("product-details/{productId}"){
+            var productId = it.arguments?.getString("productId")
+            ProductDetailsPage(modifier,productId?:"")
         }
     }
 }
