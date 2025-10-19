@@ -21,17 +21,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.model.ProductModel
 import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
+
+    var context = LocalContext.current
 
     Card(
         modifier = modifier
@@ -84,7 +88,9 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
 
                 Spacer(modifier.weight(1f))
 
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    AppUtil.addToCart(context,product.id)
+                }) {
                     Icon(
                         imageVector = Icons.Default.ShoppingCart,
                         contentDescription = null
