@@ -1,14 +1,17 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.model.UserModel
 import com.howtokaise.elira.presentation.components.CartItemView
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun CartPage(modifier: Modifier = Modifier) {
@@ -46,17 +50,32 @@ fun CartPage(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = "Your cart", fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
 
-        LazyColumn {
-            items(userModel.value.cartItems.toList(), key = {it.first}) { (productId, qty) ->
+        LazyColumn(
+            modifier = Modifier.weight(1f)
+        ) {
+            items(userModel.value.cartItems.toList(), key = { it.first }) { (productId, qty) ->
                 CartItemView(productId = productId, qty = qty)
             }
+        }
+
+        Button(
+            onClick = {
+                GlobalNavigation.navController.navigate("checkout")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 72.dp)
+                .height(50.dp)
+        ) {
+            Text(text = "Checkout")
         }
     }
 }
