@@ -73,7 +73,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "$" + product.price,
+                    text = "₹" + product.price,
                     fontSize = 14.sp,
                     textDecoration = TextDecoration.LineThrough
                 )
@@ -81,7 +81,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 Spacer(modifier.width(8.dp))
 
                 Text(
-                    text = " $" + product.actualPrice,
+                    text = " ₹" + product.actualPrice,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )

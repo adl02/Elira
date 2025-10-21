@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -121,7 +120,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "$" + product.price,
+                text = "₹" + product.price,
                 fontSize = 16.sp,
                 textDecoration = TextDecoration.LineThrough
             )
@@ -129,7 +128,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = "$" + product.actualPrice,
+                text = "₹" + product.actualPrice,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
