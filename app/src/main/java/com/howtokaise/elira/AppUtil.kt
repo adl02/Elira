@@ -1,11 +1,15 @@
 package com.howtokaise.elira
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
+import com.razorpay.Checkout
+import org.json.JSONObject
 
 object AppUtil {
     fun showToast(context: Context, message: String) {
@@ -70,5 +74,24 @@ object AppUtil {
 
     fun getTaxPercentage() : Float{
         return 13.0f
+    }
+
+    fun razorpayApiKey(): String{
+        return "rzp_test_RVuWXxPgKJBpSB"
+    }
+
+    fun startPayment(amount : Float){
+        val checkout = Checkout()
+        checkout.setKeyID(razorpayApiKey())
+
+        val amountInPaise = (amount * 100).toInt()
+
+        val options = JSONObject()
+        options.put("name","Elira")
+        options.put("description","")
+        options.put("amount",amountInPaise)
+        options.put("currency","INR")
+
+        checkout.open(GlobalNavigation.navController.context as Activity,options)
     }
 }

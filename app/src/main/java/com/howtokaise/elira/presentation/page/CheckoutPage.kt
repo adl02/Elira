@@ -105,7 +105,7 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "$"+total.value.toString(),
+            text = "₹"+total.value.toString(),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -114,7 +114,9 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                AppUtil.startPayment(total.value)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -131,6 +133,6 @@ fun RowCheckoutItems(title : String, value : String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-        Text(text = "$"+value, fontSize = 18.sp)
+        Text(text = "₹"+value, fontSize = 18.sp)
     }
 }

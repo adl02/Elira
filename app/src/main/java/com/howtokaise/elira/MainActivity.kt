@@ -14,8 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.howtokaise.elira.presentation.navigation.AppNavigation
 import com.howtokaise.elira.ui.theme.EliraTheme
+import com.razorpay.PaymentResultListener
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), PaymentResultListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,6 +34,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onPaymentSuccess(p0: String?) {
+        AppUtil.showToast(this, "Payment Success")
+    }
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+        AppUtil.showToast(this, "Payment Failed")
+
     }
 }
 
