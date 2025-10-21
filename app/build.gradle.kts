@@ -66,5 +66,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     // dotsIndicator
     implementation("com.tbuonomo:dotsindicator:5.1.0")
+    // razorpay
+    implementation("com.razorpay:checkout:1.6.41")
 
 }
