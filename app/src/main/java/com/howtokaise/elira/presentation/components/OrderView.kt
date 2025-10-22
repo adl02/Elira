@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,14 +50,15 @@ fun OrderView(orderItem: OrderModel, modifier: Modifier = Modifier) {
 
             Text(
                 orderItem.status,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFF5722)
             )
 
             Spacer(Modifier.height(4.dp))
 
             Text(
-                orderItem.items.toString(),
+                orderItem.items.size.toString()+" items",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
