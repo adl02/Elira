@@ -14,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
@@ -58,24 +61,38 @@ fun CartPage(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold
         )
 
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(userModel.value.cartItems.toList(), key = { it.first }) { (productId, qty) ->
-                CartItemView(productId = productId, qty = qty)
+        if (userModel.value.cartItems.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(userModel.value.cartItems.toList(), key = { it.first }) { (productId, qty) ->
+                    CartItemView(productId = productId, qty = qty)
+                }
             }
-        }
 
-        Button(
-            onClick = {
-                GlobalNavigation.navController.navigate("checkout")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 72.dp)
-                .height(50.dp)
-        ) {
-            Text(text = "Checkout")
+            Button(
+                onClick = {
+                    GlobalNavigation.navController.navigate("checkout")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 72.dp)
+                    .height(50.dp)
+            ) {
+                Text(text = "Checkout")
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "No items here",
+                    fontSize = 20.sp,
+                    color = Color.Gray
+                )
+            }
         }
     }
 }
