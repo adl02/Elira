@@ -12,6 +12,8 @@ import com.howtokaise.elira.model.OrderModel
 import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.razorpay.Checkout
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.UUID
 
 object AppUtil {
@@ -122,5 +124,10 @@ object AppUtil {
         options.put("currency","INR")
 
         checkout.open(GlobalNavigation.navController.context as Activity,options)
+    }
+
+    fun formatDate(timestamp: Timestamp) : String{
+        val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+        return sdf.format(timestamp.toDate().time)
     }
 }
