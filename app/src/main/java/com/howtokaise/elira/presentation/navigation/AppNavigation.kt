@@ -14,6 +14,7 @@ import com.howtokaise.elira.presentation.authentication.SignupScreen
 import com.howtokaise.elira.presentation.navigationbar.HomeScreen
 import com.howtokaise.elira.presentation.page.CategoryProductsPage
 import com.howtokaise.elira.presentation.page.CheckoutPage
+import com.howtokaise.elira.presentation.page.OrdersPage
 import com.howtokaise.elira.presentation.page.ProductDetailsPage
 
 @Composable
@@ -54,6 +55,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
         composable("checkout"){
             CheckoutPage(modifier)
+        }
+
+        composable("orders"){
+            OrdersPage(modifier)
         }
     }
 }
