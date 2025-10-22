@@ -1,5 +1,6 @@
 package com.howtokaise.elira
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.howtokaise.elira.presentation.navigation.AppNavigation
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.howtokaise.elira.ui.theme.EliraTheme
 import com.razorpay.PaymentResultListener
 
@@ -37,7 +39,19 @@ class MainActivity : ComponentActivity(), PaymentResultListener {
     }
 
     override fun onPaymentSuccess(p0: String?) {
-        AppUtil.showToast(this, "Payment Success")
+        AppUtil.clearCartAndAddToOrders()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Payment Successful")
+            .setMessage("Thank you! Your payment was completed successfully and your order has been placed")
+            .setPositiveButton("OK"){_,_->
+                val navController = GlobalNavigation.navController
+                navController.popBackStack()
+                navController.navigate("home")
+            }
+            .setCancelable(false)
+            .show()
+
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {
