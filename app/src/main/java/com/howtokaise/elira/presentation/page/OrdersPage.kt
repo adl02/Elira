@@ -29,7 +29,7 @@ fun OrdersPage(modifier: Modifier = Modifier) {
             .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             .get().addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val resultList = it.result.documents.mapNotNull { doc ->
+                    val resultList = it.result.documents.mapNotNull {doc ->
                         doc.toObject(OrderModel::class.java)
                     }
                     orderList.value = resultList
