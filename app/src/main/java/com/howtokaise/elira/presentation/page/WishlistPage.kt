@@ -5,6 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FavouritePage(modifier: Modifier = Modifier) {
+fun WishlistPage(modifier: Modifier = Modifier) {
     Text("favourite page")
 }
