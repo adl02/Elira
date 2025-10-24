@@ -29,7 +29,7 @@ fun OrdersPage(modifier: Modifier = Modifier) {
             .whereEqualTo("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
             .get().addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val resultList = it.result.documents.mapNotNull {doc ->
+                    val resultList = it.result.documents.mapNotNull { doc ->
                         doc.toObject(OrderModel::class.java)
                     }
                     orderList.value = resultList
@@ -40,7 +40,7 @@ fun OrdersPage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(10.dp)
     ) {
         Text(
             text = "Your orders",
@@ -51,7 +51,7 @@ fun OrdersPage(modifier: Modifier = Modifier) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(orderList.value){
+            items(orderList.value) {
                 OrderView(it)
             }
         }
