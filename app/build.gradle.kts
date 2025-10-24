@@ -68,5 +68,7 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
     // razorpay
     implementation("com.razorpay:checkout:1.6.41")
+    // emoji
+    implementation ("androidx.compose.material:material-icons-extended:1.6.0")
 
 }
