@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Receipt
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -120,11 +121,14 @@ fun ProfilePage(modifier: Modifier = Modifier) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
+                .padding(start = 60.dp, end = 60.dp)
+                .align(Alignment.CenterHorizontally),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2C73A9))
         ) {
             Text(
                 text = "Sign out",
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                color = Color.White
             )
         }
     }
