@@ -1,6 +1,7 @@
 package com.howtokaise.elira.presentation.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -16,8 +18,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +46,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.model.ProductModel
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
@@ -77,14 +82,28 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
             .verticalScroll(rememberScrollState())
     ) {
 
-        Text(
-            text = product.title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(8.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(25.dp)
+                    .clickable { GlobalNavigation.navController.popBackStack() }
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(
+                text = "Continue to Shopping",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal
 
-        Spacer(modifier = Modifier.height(8.dp))
+            )
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
 
         Column {
             val pagerState = rememberPagerState(0) {
@@ -118,12 +137,17 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Text(
+            text = product.title,
+            fontWeight = FontWeight.Medium,
+            fontSize = 20.sp,
+        )
 
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+                .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -158,9 +182,10 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
         ) {
-            Text("Add to Cart", fontSize = 16.sp)
+            Text("Add to Cart", color = Color.White, fontSize = 16.sp)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
