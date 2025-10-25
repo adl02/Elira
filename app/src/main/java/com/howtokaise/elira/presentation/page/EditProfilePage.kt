@@ -2,6 +2,7 @@ package com.howtokaise.elira.presentation.page
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -27,22 +29,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.R
 import com.howtokaise.elira.model.UserModel
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun EditProfilePage(modifier: Modifier = Modifier) {
     val userModel = remember { mutableStateOf(UserModel()) }
     var nameInput by remember { mutableStateOf(userModel.value.name) }
     var emailInput by remember { mutableStateOf(userModel.value.name) }
+
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
 
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
@@ -89,50 +96,63 @@ fun EditProfilePage(modifier: Modifier = Modifier) {
             value = nameInput,
             onValueChange = { nameInput = it },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                if (nameInput.isNotEmpty()) {
-                    Firebase.firestore.collection("users")
-                        .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-                        .update("name", nameInput)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                AppUtil.showToast(context, "Name updated successfully")
-                            }
-                        }
-                } else {
-                    AppUtil.showToast(context, "Name can't be empty")
-                }
-            }),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
-            )
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color(0xFF2874F0)
+            ),
+            label = {
+                Text("Full Name")
+            }
         )
 
         TextField(
             value = emailInput,
             onValueChange = { emailInput = it },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                if (emailInput.isNotEmpty()) {
-                    Firebase.firestore.collection("users")
-                        .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-                        .update("email", nameInput)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                AppUtil.showToast(context, "Email updated successfully")
-                            }
-                        }
-                } else {
-                    AppUtil.showToast(context, "Email can't be empty")
-                }
-            }),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent
-            )
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color(0xFF2874F0)
+            ),
+            label = {
+                Text("Email ID")
+            }
+        )
+
+        Text(
+            text = "SUBMIT",
+            color = Color(0xFF2874F0),
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(35.dp)
+                .align(Alignment.CenterHorizontally)
+                .clickable {
+                    if (nameInput.isNotEmpty() && emailInput.isNotEmpty()) {
+                        Firebase.firestore.collection("users")
+                            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                            .update(
+                                mapOf(
+                                    "name" to nameInput,
+                                    "email" to emailInput
+                                )
+                            )
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    AppUtil.showToast(context, "Profile updated successfully")
+                                    GlobalNavigation.navController.popBackStack()
+                                } else {
+                                    AppUtil.showToast(context, "Update failed")
+                                }
+                            }
+                    } else {
+                        AppUtil.showToast(context, "Fields can't be empty")
+                    }
+                }
         )
     }
 }
