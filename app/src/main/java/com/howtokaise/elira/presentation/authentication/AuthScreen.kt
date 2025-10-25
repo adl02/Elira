@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,7 +70,8 @@ fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController) 
             onClick = {navController.navigate("login")},
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
         ) {
             Text("Login",fontSize = 20.sp)
         }

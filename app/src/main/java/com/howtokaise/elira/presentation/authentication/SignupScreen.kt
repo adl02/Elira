@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -135,7 +136,8 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController , a
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
         ) {
             if (isLoading){
                 CircularProgressIndicator()
