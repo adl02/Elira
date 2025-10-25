@@ -85,6 +85,8 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
             }
     }
 
+    val address = userModel.value.address
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -93,9 +95,13 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
     ) {
         Text(text = "Checkout", fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Deliver to : ", fontWeight = FontWeight.SemiBold)
-        Text(text = userModel.value.name)
-        Text(text = userModel.value.address)
+
+        Text(text = "Deliver to:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Spacer(Modifier.height(4.dp))
+        Text(text = address.fullName, fontWeight = FontWeight.Medium)
+        Text(text = address.phone)
+        Text(text = "${address.roadName}, ${address.city}, ${address.state} - ${address.pincode}")
+
         Spacer(modifier = Modifier.height(16.dp))
         HorizontalDivider()
         Spacer(modifier = Modifier.height(16.dp))
