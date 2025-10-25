@@ -15,6 +15,7 @@ import com.howtokaise.elira.presentation.homescreen.HomeScreen
 import com.howtokaise.elira.presentation.page.AddressPage
 import com.howtokaise.elira.presentation.page.CategoryProductsPage
 import com.howtokaise.elira.presentation.page.CheckoutPage
+import com.howtokaise.elira.presentation.page.EditAddress
 import com.howtokaise.elira.presentation.page.EditProfilePage
 import com.howtokaise.elira.presentation.page.WishlistPage
 import com.howtokaise.elira.presentation.page.OrdersPage
@@ -70,6 +71,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
         composable("address"){
             AddressPage(modifier)
+        }
+
+        composable("editaddress"){
+            EditAddress(modifier)
         }
 
         composable("editProfile"){
