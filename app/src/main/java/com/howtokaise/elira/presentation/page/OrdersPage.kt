@@ -1,5 +1,7 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,9 @@ import com.howtokaise.elira.presentation.components.OrderView
 @Composable
 fun OrdersPage(modifier: Modifier = Modifier) {
     val orderList = remember { mutableStateOf<List<OrderModel>>(emptyList()) }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
     LaunchedEffect(Unit) {
         Firebase.firestore.collection("orders")
@@ -40,6 +46,7 @@ fun OrdersPage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(backgroundColor)
             .padding(10.dp)
     ) {
         Text(

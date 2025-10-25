@@ -1,5 +1,7 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,6 +34,8 @@ import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 fun CartPage(modifier: Modifier = Modifier) {
 
     val userModel = remember { mutableStateOf(UserModel()) }
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
     DisposableEffect(Unit) {
         var listener = Firebase.firestore.collection("users")
@@ -52,7 +57,8 @@ fun CartPage(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .background(backgroundColor)
+            .padding(10.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -75,10 +81,11 @@ fun CartPage(modifier: Modifier = Modifier) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 72.dp)
-                    .height(50.dp)
+                    .padding(bottom = 82.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
             ) {
-                Text(text = "Checkout")
+                Text(text = "Checkout", color = Color.White, fontSize = 16.sp)
             }
         } else {
             Column(

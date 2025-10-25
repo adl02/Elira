@@ -1,6 +1,8 @@
 package com.howtokaise.elira.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -37,15 +40,19 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
 
     var context = LocalContext.current
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+
     Card(
         modifier = modifier
             .padding(8.dp)
             .clickable {
-                GlobalNavigation.navController.navigate("product-details/"+product.id)
+                GlobalNavigation.navController.navigate("product-details/" + product.id)
             },
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.elevatedCardElevation(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        elevation = CardDefaults.elevatedCardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        border = BorderStroke(1.dp, Color.Gray)
     ) {
         Column(
             modifier = Modifier.padding(12.dp)
@@ -54,7 +61,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 model = product.images.firstOrNull(),
                 contentDescription = null,
                 modifier = Modifier
-                    .height(120.dp)
+                    .height(110.dp)
                     .fillMaxWidth()
             )
 
@@ -63,7 +70,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(top = 8.dp)
             )
 
             Row(
@@ -89,7 +96,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 Spacer(modifier.weight(1f))
 
                 IconButton(onClick = {
-                    AppUtil.addToCart(context,product.id)
+                    AppUtil.addToCart(context, product.id)
                 }) {
                     Icon(
                         imageVector = Icons.Default.ShoppingCart,

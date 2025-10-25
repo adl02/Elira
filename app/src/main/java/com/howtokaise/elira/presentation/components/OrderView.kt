@@ -1,5 +1,7 @@
 package com.howtokaise.elira.presentation.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +23,17 @@ import com.howtokaise.elira.model.OrderModel
 
 @Composable
 fun OrderView(orderItem: OrderModel, modifier: Modifier = Modifier) {
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        border = BorderStroke(1.dp, Color.Gray),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Column(
@@ -52,7 +59,7 @@ fun OrderView(orderItem: OrderModel, modifier: Modifier = Modifier) {
                 orderItem.status,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFF5722)
+                color = Color(0xFF3AB54A) //3ab54a
             )
 
             Spacer(Modifier.height(4.dp))

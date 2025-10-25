@@ -1,5 +1,7 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +20,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,16 +42,19 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
     val tax = remember { mutableStateOf(0f) }
     val total = remember { mutableStateOf(0f) }
 
-    fun calculateAndAssign(){
-        productList.forEach{
-            if (it.actualPrice.isNotEmpty()){
-                val  qyt = userModel.value.cartItems[it.id] ?: 0
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+
+    fun calculateAndAssign() {
+        productList.forEach {
+            if (it.actualPrice.isNotEmpty()) {
+                val qyt = userModel.value.cartItems[it.id] ?: 0
                 subTotal.value += it.actualPrice.toFloat() * qyt
             }
         }
 
-        discount.value = subTotal.value * (AppUtil.getDiscountPercentage())/100
-        tax.value = subTotal.value * (AppUtil.getTaxPercentage()/100)
+        discount.value = subTotal.value * (AppUtil.getDiscountPercentage()) / 100
+        tax.value = subTotal.value * (AppUtil.getTaxPercentage() / 100)
         total.value = "%.2f".format(subTotal.value - discount.value + tax.value).toFloat()
     }
 
@@ -55,18 +62,19 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
         Firebase.firestore.collection("users")
             .document(FirebaseAuth.getInstance().currentUser?.uid!!)
             .get().addOnCompleteListener {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     val result = it.result.toObject(UserModel::class.java)
-                    if (result!=null){
+                    if (result != null) {
                         userModel.value = result
 
                         Firebase.firestore.collection("data")
                             .document("stock").collection("products")
                             .whereIn("id", userModel.value.cartItems.keys.toList())
-                            .get().addOnCompleteListener { task->
-                                if (task.isSuccessful){
-                                    if (task.isSuccessful){
-                                        val resultProducts = task.result.toObjects(ProductModel::class.java)
+                            .get().addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    if (task.isSuccessful) {
+                                        val resultProducts =
+                                            task.result.toObjects(ProductModel::class.java)
                                         productList.addAll(resultProducts)
                                         calculateAndAssign()
                                     }
@@ -80,6 +88,7 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(backgroundColor)
             .padding(16.dp)
     ) {
         Text(text = "Checkout", fontSize = 22.sp, fontWeight = FontWeight.Bold)
@@ -105,7 +114,7 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "₹"+total.value.toString(),
+            text = "₹" + total.value.toString(),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -119,20 +128,21 @@ fun CheckoutPage(modifier: Modifier = Modifier) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(Color(0xFF349137))
         ) {
-            Text(text = "Pay Now")
+            Text(text = "Pay Now", color = Color.White, fontSize = 16.sp)
         }
     }
 }
 
 @Composable
-fun RowCheckoutItems(title : String, value : String) {
+fun RowCheckoutItems(title: String, value: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-        Text(text = "₹"+value, fontSize = 18.sp)
+        Text(text = "₹" + value, fontSize = 18.sp)
     }
 }

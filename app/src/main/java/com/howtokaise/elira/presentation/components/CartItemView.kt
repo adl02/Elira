@@ -1,5 +1,8 @@
 package com.howtokaise.elira.presentation.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,17 +39,20 @@ import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.model.ProductModel
 
 @Composable
-fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) {
+fun CartItemView(modifier: Modifier = Modifier, productId: String, qty: Long) {
 
     var product by remember { mutableStateOf(ProductModel()) }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
     LaunchedEffect(Unit) {
         Firebase.firestore.collection("data")
             .document("stock").collection("products")
             .document(productId).get().addOnCompleteListener {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     val result = it.result.toObject(ProductModel::class.java)
-                    if (result!=null){
+                    if (result != null) {
                         product = result
                     }
                 }
@@ -60,7 +67,8 @@ fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) 
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        border = BorderStroke(1.dp, Color.Gray)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -75,7 +83,8 @@ fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) 
             )
 
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)
                     .weight(1f)
             ) {
                 Text(
@@ -95,7 +104,7 @@ fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) 
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = {
-                        AppUtil.removeToCart(context,productId)
+                        AppUtil.removeToCart(context, productId)
                     }) {
                         Text(text = "-", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
@@ -103,7 +112,7 @@ fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) 
                     Text(text = "$qty", fontSize = 16.sp)
 
                     IconButton(onClick = {
-                        AppUtil.addToCart(context,productId)
+                        AppUtil.addToCart(context, productId)
                     }) {
                         Text(text = "+", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
@@ -112,7 +121,7 @@ fun CartItemView(modifier: Modifier = Modifier, productId : String, qty : Long) 
             }
 
             IconButton(onClick = {
-AppUtil.removeToCart(context,productId,true)
+                AppUtil.removeToCart(context, productId, true)
             }) {
                 Icon(
                     imageVector = Icons.Default.Delete,

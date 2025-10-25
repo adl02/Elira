@@ -1,5 +1,7 @@
 package com.howtokaise.elira.presentation.page
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -49,6 +52,9 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
     var product by remember { mutableStateOf(ProductModel()) }
     var context = LocalContext.current
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+
     LaunchedEffect(Unit) {
         Firebase.firestore.collection("data").document("stock")
             .collection("products")
@@ -66,6 +72,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(backgroundColor)
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
@@ -147,7 +154,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
 
         Button(
             onClick = {
-                AppUtil.addToCart(context,product.id)
+                AppUtil.addToCart(context, product.id)
             },
             modifier = Modifier
                 .fillMaxWidth()
