@@ -72,7 +72,6 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
                         )
                     }
                 }
-                HorizontalDivider()
             }
         }
     ) {
