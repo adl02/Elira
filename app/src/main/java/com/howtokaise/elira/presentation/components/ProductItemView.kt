@@ -13,17 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -45,7 +46,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
 
     Card(
         modifier = modifier
-            .padding(8.dp)
+            .padding(5.dp)
             .clickable {
                 GlobalNavigation.navController.navigate("product-details/" + product.id)
             },
@@ -61,7 +62,7 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
                 model = product.images.firstOrNull(),
                 contentDescription = null,
                 modifier = Modifier
-                    .height(110.dp)
+                    .height(130.dp)
                     .fillMaxWidth()
             )
 
@@ -75,34 +76,53 @@ fun ProductItemView(modifier: Modifier = Modifier, product: ProductModel) {
 
             Row(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
+
+                Icon(
+                    Icons.Default.ArrowDownward, contentDescription = null,
+                    tint = Color(0xFF349137)
+                )
+                Text(
+                    text = "40%",
+                    fontSize = 16.sp,
+                    color = Color(0xFF349137)
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
                     text = "₹" + product.price,
                     fontSize = 14.sp,
                     textDecoration = TextDecoration.LineThrough
                 )
-
-                Spacer(modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(2.dp))
 
                 Text(
-                    text = " ₹" + product.actualPrice,
+                    text = "₹" + product.actualPrice,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
 
-                Spacer(modifier.weight(1f))
+            Row {
+                RatingStars(4.5f)
+                Spacer(modifier = Modifier.width(2.dp))
+                Text("✔ Assured", fontSize = 12.sp, color = Color(0xFF2874F0))
+            }
 
-                IconButton(onClick = {
-                    AppUtil.addToCart(context, product.id)
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = null
-                    )
-                }
+            Button(
+                onClick = { AppUtil.addToCart(context, product.id) },
+                modifier = Modifier
+
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = if (isDarkTheme) Color.Black else Color.White),
+                border = BorderStroke(1.dp, Color.Gray),
+                shape = RectangleShape
+            ) {
+                Text("Add to Cart", color = Color(0xFF2874F0))
             }
         }
     }
