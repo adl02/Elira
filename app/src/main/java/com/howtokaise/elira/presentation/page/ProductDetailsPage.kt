@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,9 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.AppUtil
+import com.howtokaise.elira.WishlistUtil
 import com.howtokaise.elira.model.ProductModel
+import com.howtokaise.elira.model.UserModel
 import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
@@ -54,24 +58,39 @@ import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 @Composable
 fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
 
-    var product by remember { mutableStateOf(ProductModel()) }
-    var context = LocalContext.current
-
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
+    val context = LocalContext.current
+    var product by remember { mutableStateOf(ProductModel()) }
+    var isFavorite by remember { mutableStateOf(false) }
+
+    val firestore = Firebase.firestore
+    val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+
     LaunchedEffect(Unit) {
-        Firebase.firestore.collection("data").document("stock")
+        Firebase.firestore.collection("data")
+            .document("stock")
             .collection("products")
             .document(productId).get()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    var result = it.result.toObject(ProductModel::class.java)
-                    if (result != null) {
-                        product = result
-                    }
+            .addOnSuccessListener { doc ->
+                val result = doc.toObject(ProductModel::class.java)
+                if (result != null) {
+                    product = result
+                } else {
+                    // If your ProductModel uses different field names, adjust model accordingly
                 }
             }
+        // Fetch user's wishlist to check initial favorite state
+        if (uid != null) {
+            firestore.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener { userDoc ->
+                    val user = userDoc.toObject(UserModel::class.java)
+                    isFavorite = user?.wishlist?.contains(productId) == true
+                }
+        }
     }
 
     Column(
@@ -106,15 +125,10 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
         Spacer(modifier = Modifier.height(18.dp))
 
         Column {
-            val pagerState = rememberPagerState(0) {
-                product.images.size
-            }
-            HorizontalPager(
-                state = pagerState,
-                pageSpacing = 24.dp
-            ) {
+            val pagerState = rememberPagerState { product.images.size }
+            HorizontalPager(state = pagerState, pageSpacing = 24.dp) { page ->
                 AsyncImage(
-                    model = product.images.get(it),
+                    model = product.images.getOrNull(page),
                     contentDescription = null,
                     modifier = Modifier
                         .height(220.dp)
@@ -146,8 +160,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -158,18 +171,23 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
-                text = "₹" + product.actualPrice,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = "₹" + product.actualPrice, fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
             Spacer(modifier.weight(1f))
 
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                if (isFavorite) {
+                    WishlistUtil.removeFromWishlist(productId)
+                    isFavorite = false
+                } else {
+                    WishlistUtil.addToWishlist(productId)
+                    isFavorite = false
+                }
+            }) {
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = null
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = null,
+                    tint = if (isFavorite) Color.Red else Color.Gray
                 )
             }
         }
@@ -177,12 +195,8 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {
-                AppUtil.addToCart(context, product.id)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            onClick = { AppUtil.addToCart(context, product.id) },
+            modifier = Modifier.fillMaxWidth().height(50.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
         ) {
             Text("Add to Cart", color = Color.White, fontSize = 16.sp)
@@ -190,11 +204,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "Product description : ",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
-        )
+        Text(text = "Product description : ", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(text = product.description, fontSize = 16.sp)
@@ -202,19 +212,12 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
         Spacer(modifier = Modifier.height(16.dp))
 
         if (product.otherDetails.isNotEmpty())
-            Text(
-                text = "Other Product details : ",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+            Text(text = "Other Product details : ", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
 
         Spacer(modifier = Modifier.height(8.dp))
 
         product.otherDetails.forEach { (key, value) ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp)
+            Row(modifier = Modifier.fillMaxWidth().padding(4.dp)
             ) {
                 Text(text = "$key : ", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 Text(text = value, fontSize = 16.sp)
