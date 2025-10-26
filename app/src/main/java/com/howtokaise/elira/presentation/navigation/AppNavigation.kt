@@ -31,21 +31,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = firstPage) {
 
-        composable("auth"){
-            AuthScreen(modifier,navController)
-        }
+        composable("auth"){ AuthScreen(modifier,navController) }
 
-        composable("signup"){
-            SignupScreen(modifier,navController)
-        }
+        composable("signup"){ SignupScreen(modifier,navController) }
 
-        composable("login"){
-            LoginScreen(modifier,navController)
-        }
+        composable("login"){ LoginScreen(modifier,navController) }
 
-        composable("home"){
-            HomeScreen(modifier,navController)
-        }
+        composable("home"){ HomeScreen(modifier,navController) }
 
         composable("category-products/{categoryId}"){
             var categoryId = it.arguments?.getString("categoryId")
@@ -57,29 +49,17 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             ProductDetailsPage(modifier,productId?:"")
         }
 
-        composable("checkout"){
-            CheckoutPage(modifier)
-        }
+        composable("checkout"){ CheckoutPage(modifier) }
 
-        composable("orders"){
-            OrdersPage(modifier)
-        }
+        composable("orders"){ OrdersPage(modifier) }
 
-        composable("wishlist"){
-            WishlistPage(modifier)
-        }
+        composable("wishlist"){ WishlistPage(modifier) }
 
-        composable("address"){
-            AddressPage(modifier)
-        }
+        composable("address"){ AddressPage(modifier) }
 
-        composable("editaddress"){
-            EditAddress(modifier)
-        }
+        composable("editaddress"){ EditAddress(modifier) }
 
-        composable("editProfile"){
-            EditProfilePage(modifier)
-        }
+        composable("editProfile"){ EditProfilePage(modifier) }
     }
 }
 
