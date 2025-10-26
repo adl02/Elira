@@ -5,5 +5,6 @@ data class UserModel(
     val email : String = "",
     val uid : String = "",
     val cartItems : Map<String,Long> = emptyMap(),
-    val address : AddressModel = AddressModel()
+    val address : AddressModel = AddressModel(),
+    val wishlist : List<String> = emptyList()
 )
