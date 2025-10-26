@@ -49,10 +49,8 @@ fun WishlistPage(modifier: Modifier = Modifier) {
     DisposableEffect(Unit) {
         if (uid == null) {
             productList = emptyList()
-            // Nothing more to do, just provide a DisposableEffectResult
-            onDispose { }  // ✅ this satisfies the return type
+            onDispose { }
         } else {
-            // Normal logic for listening to wishlist
             var userListener: ListenerRegistration? = null
             var productListeners: MutableList<ListenerRegistration> = mutableListOf()
 

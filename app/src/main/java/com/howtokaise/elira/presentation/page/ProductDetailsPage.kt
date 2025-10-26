@@ -78,11 +78,9 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
                 val result = doc.toObject(ProductModel::class.java)
                 if (result != null) {
                     product = result
-                } else {
-                    // If your ProductModel uses different field names, adjust model accordingly
                 }
             }
-        // Fetch user's wishlist to check initial favorite state
+        // Fetch user's wishlist
         if (uid != null) {
             firestore.collection("users").document(uid)
                 .get()
