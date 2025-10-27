@@ -179,7 +179,7 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
                     isFavorite = false
                 } else {
                     WishlistUtil.addToWishlist(productId)
-                    isFavorite = false
+                    isFavorite = true
                 }
             }) {
                 Icon(
