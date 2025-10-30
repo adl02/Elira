@@ -63,8 +63,6 @@ Users can browse products, manage carts and wishlists, complete secure payments,
 
 ## 🖼️ Screenshots
 
-> Replace the image paths with your actual screenshot filenames (e.g., `screenshots/signup.png`)
-
 |              Signup               |              Login              |             Home              | Search |
 |:---------------------------------:|:-------------------------------:|:-----------------------------:|:--:|
 | ![Signup](screenshots/signup.jpg) | ![Login](screenshots/login.jpg) | ![Home](screenshots/home.jpg) | ![Search](screenshots/search.jpg) |
