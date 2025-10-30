@@ -90,15 +90,10 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
                 }
         }
     }
-
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier = Modifier
+        .background(backgroundColor)
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -122,103 +117,129 @@ fun ProductDetailsPage(modifier: Modifier = Modifier, productId: String) {
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        Column {
-            val pagerState = rememberPagerState { product.images.size }
-            HorizontalPager(state = pagerState, pageSpacing = 24.dp) { page ->
-                AsyncImage(
-                    model = product.images.getOrNull(page),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(220.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                )
-            }
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            DotsIndicator(
-                dotCount = product.images.size,
-                type = ShiftIndicatorType(
-                    DotGraphic(
-                        color = MaterialTheme.colorScheme.primary,
-                        size = 6.dp
+            Column {
+                val pagerState = rememberPagerState { product.images.size }
+                HorizontalPager(state = pagerState, pageSpacing = 24.dp) { page ->
+                    AsyncImage(
+                        model = product.images.getOrNull(page),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(220.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
                     )
-                ),
-                pagerState = pagerState
-            )
-        }
-
-        Spacer(modifier = Modifier.height(18.dp))
-
-        Text(
-            text = product.title,
-            fontWeight = FontWeight.Medium,
-            fontSize = 20.sp,
-        )
-
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "₹" + product.price,
-                fontSize = 16.sp,
-                textDecoration = TextDecoration.LineThrough
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(text = "₹" + product.actualPrice, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
-            Spacer(modifier.weight(1f))
-
-            IconButton(onClick = {
-                if (isFavorite) {
-                    WishlistUtil.removeFromWishlist(productId)
-                    isFavorite = false
-                } else {
-                    WishlistUtil.addToWishlist(productId)
-                    isFavorite = true
                 }
-            }) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = null,
-                    tint = if (isFavorite) Color.Red else Color.Gray
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                DotsIndicator(
+                    dotCount = product.images.size,
+                    type = ShiftIndicatorType(
+                        DotGraphic(
+                            color = MaterialTheme.colorScheme.primary,
+                            size = 6.dp
+                        )
+                    ),
+                    pagerState = pagerState
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
-        Button(
-            onClick = { AppUtil.addToCart(context, product.id) },
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
-        ) {
-            Text("Add to Cart", color = Color.White, fontSize = 16.sp)
-        }
+            Text(
+                text = product.title,
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = "Product description : ", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = product.description, fontSize = 16.sp)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (product.otherDetails.isNotEmpty())
-            Text(text = "Other Product details : ", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        product.otherDetails.forEach { (key, value) ->
-            Row(modifier = Modifier.fillMaxWidth().padding(4.dp)
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "$key : ", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                Text(text = value, fontSize = 16.sp)
+                Text(
+                    text = "₹" + product.price,
+                    fontSize = 16.sp,
+                    textDecoration = TextDecoration.LineThrough
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = "₹" + product.actualPrice,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier.weight(1f))
+
+                IconButton(onClick = {
+                    if (isFavorite) {
+                        WishlistUtil.removeFromWishlist(productId)
+                        isFavorite = false
+                    } else {
+                        WishlistUtil.addToWishlist(productId)
+                        isFavorite = true
+                    }
+                }) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = null,
+                        tint = if (isFavorite) Color.Red else Color.Gray
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = { AppUtil.addToCart(context, product.id) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
+            ) {
+                Text("Add to Cart", color = Color.White, fontSize = 16.sp)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Product description : ",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(text = product.description, fontSize = 16.sp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (product.otherDetails.isNotEmpty())
+                Text(
+                    text = "Other Product details : ",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            product.otherDetails.forEach { (key, value) ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                ) {
+                    Text(text = "$key : ", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text(text = value, fontSize = 16.sp)
+                }
             }
         }
     }

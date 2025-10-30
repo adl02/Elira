@@ -48,7 +48,6 @@ fun CartPage(modifier: Modifier = Modifier) {
                     }
                 }
             }
-
         onDispose {
             listener.remove()
         }

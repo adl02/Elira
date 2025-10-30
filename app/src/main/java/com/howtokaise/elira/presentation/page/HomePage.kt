@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +34,7 @@ fun HomePage(modifier: Modifier = Modifier) {
 
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
-    val productList = remember { mutableStateOf<List<ProductModel>>(emptyList()) }
+    val productList = rememberSaveable { mutableStateOf<List<ProductModel>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         Firebase.firestore.collection("data")

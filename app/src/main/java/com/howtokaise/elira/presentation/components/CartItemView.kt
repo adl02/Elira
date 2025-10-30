@@ -2,6 +2,7 @@ package com.howtokaise.elira.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.howtokaise.elira.AppUtil
 import com.howtokaise.elira.model.ProductModel
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun CartItemView(modifier: Modifier = Modifier, productId: String, qty: Long) {
@@ -64,7 +66,9 @@ fun CartItemView(modifier: Modifier = Modifier, productId: String, qty: Long) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp).clickable {
+                GlobalNavigation.navController.navigate("product-details/" + product.id)
+            },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(8.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
@@ -128,8 +132,6 @@ fun CartItemView(modifier: Modifier = Modifier, productId: String, qty: Long) {
                     contentDescription = null
                 )
             }
-
         }
     }
-
 }
