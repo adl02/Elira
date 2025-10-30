@@ -70,5 +70,6 @@ dependencies {
     implementation("com.razorpay:checkout:1.6.41")
     // emoji
     implementation ("androidx.compose.material:material-icons-extended:1.6.0")
-
+    // splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.howtokaise.elira.presentation.navigation.AppNavigation
 import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.howtokaise.elira.ui.theme.EliraTheme
@@ -21,6 +22,7 @@ import com.razorpay.PaymentResultListener
 class MainActivity : ComponentActivity(), PaymentResultListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge()
         setContent {
             val isDarkTheme = isSystemInDarkTheme()
