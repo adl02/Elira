@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 
 @Composable
 fun HeaderView(modifier: Modifier = Modifier) {
@@ -46,7 +47,7 @@ fun HeaderView(modifier: Modifier = Modifier) {
             Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
         IconButton(
-            onClick = {}
+            onClick = {GlobalNavigation.navController.navigate("search")}
         ) {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         }

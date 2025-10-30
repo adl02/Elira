@@ -20,6 +20,7 @@ import com.howtokaise.elira.presentation.page.EditProfilePage
 import com.howtokaise.elira.presentation.page.WishlistPage
 import com.howtokaise.elira.presentation.page.OrdersPage
 import com.howtokaise.elira.presentation.page.ProductDetailsPage
+import com.howtokaise.elira.presentation.page.SearchPage
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
@@ -60,6 +61,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable("editaddress"){ EditAddress(modifier) }
 
         composable("editProfile"){ EditProfilePage(modifier) }
+
+        composable("search"){ SearchPage(modifier) }
     }
 }
 
