@@ -8,6 +8,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import com.howtokaise.elira.model.AddressModel
 import com.howtokaise.elira.model.OrderModel
 import com.howtokaise.elira.presentation.navigation.GlobalNavigation
 import com.razorpay.Checkout
@@ -80,13 +81,26 @@ object AppUtil {
         userDoc.get().addOnCompleteListener {
             if (it.isSuccessful) {
                 val currentCart = it.result.get("cartItems") as? Map<String, Long> ?: emptyMap()
+                val addressData = it.result.get("address") as? Map<String, Any>
+                val addressModel = addressData?.let { map ->
+                    AddressModel(
+                        fullName = map["fullName"] as? String ?: "",
+                        phone = map["phone"] as? String ?: "",
+                        alternatePhone = map["alternatePhone"] as? String ?: "",
+                        pincode = map["pincode"] as? String ?: "",
+                        city = map["city"] as? String ?: "",
+                        state = map["state"] as? String ?: "",
+                        roadName = map["roadName"] as? String ?: "",
+                        landmark = map["landmark"] as? String ?: ""
+                    )
+                } ?: AddressModel()
                 val order = OrderModel(
                     id ="ORD_"+ UUID.randomUUID().toString().replace("_","").take(10).uppercase(),
                     userId = FirebaseAuth.getInstance().currentUser?.uid!!,
                     date = Timestamp.now(),
                     items = currentCart,
                     status = "ORDERED",
-                    address = it.result.get("address") as String
+                    address = addressModel
                 )
                 Firebase.firestore.collection("orders")
                     .document(order.id).set(order)

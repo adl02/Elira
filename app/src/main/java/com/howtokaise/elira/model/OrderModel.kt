@@ -8,5 +8,5 @@ data class OrderModel(
     val userId : String = "",
     val items : Map<String,Long> = mapOf(),
     val status : String = "",
-    val address : String = ""
+    val address : AddressModel = AddressModel()
 )

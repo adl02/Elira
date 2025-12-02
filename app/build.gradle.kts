@@ -61,7 +61,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // navigation
-    implementation("androidx.navigation:navigation-compose:2.9.5")
+    implementation("androidx.navigation:navigation-compose:2.9.6")
     // coil
     implementation("io.coil-kt:coil-compose:2.7.0")
     // dotsIndicator
@@ -69,7 +69,7 @@ dependencies {
     // razorpay
     implementation("com.razorpay:checkout:1.6.41")
     // emoji
-    implementation ("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.7.8")
     // splash
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
 }
