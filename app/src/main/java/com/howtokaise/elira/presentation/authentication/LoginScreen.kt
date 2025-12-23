@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,7 +40,11 @@ import com.howtokaise.elira.R
 import com.howtokaise.elira.presentation.viewmodel.AuthViewmodel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, authViewmodel: AuthViewmodel= viewModel()) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    authViewmodel: AuthViewmodel = viewModel()
+) {
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
 
@@ -52,7 +59,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .padding(32.dp),
+            .padding(32.dp)
+            .imePadding()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -108,16 +117,28 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
 
         Button(
             onClick = {
-                isLoading = true
-                authViewmodel.login(email,password){success, errorMessage->
-                    if (success){
-                        isLoading = false
-                        navController.navigate("home"){
-                            popUpTo("auth"){inclusive = true}
+                when {
+                    email.isBlank() -> {
+                        AppUtil.showToast(context, "Email cannot be empty")
+                    }
+
+                    password.isBlank() -> {
+                        AppUtil.showToast(context, "Password cannot be empty")
+                    }
+
+                    else -> {
+                        isLoading = true
+                        authViewmodel.login(email, password) { success, errorMessage ->
+                            if (success) {
+                                isLoading = false
+                                navController.navigate("home") {
+                                    popUpTo("auth") { inclusive = true }
+                                }
+                            } else {
+                                isLoading = false
+                                AppUtil.showToast(context, errorMessage ?: "Something went wrong")
+                            }
                         }
-                    }else{
-                        isLoading = false
-                        AppUtil.showToast(context,errorMessage?: "Something went wrong")
                     }
                 }
             },
@@ -127,10 +148,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2874F0))
         ) {
-            if (isLoading){
+            if (isLoading) {
                 CircularProgressIndicator()
-            }else{
-                Text("Login",fontSize = 20.sp)
+            } else {
+                Text("Login", fontSize = 20.sp)
             }
         }
     }

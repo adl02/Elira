@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Receipt
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -27,6 +28,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +50,9 @@ fun ProfilePage(modifier: Modifier = Modifier) {
 
     val isDarkTheme = isSystemInDarkTheme()
     val backgroundColor = if (isDarkTheme) Color.Black else Color.White
+
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = modifier
@@ -114,10 +122,7 @@ fun ProfilePage(modifier: Modifier = Modifier) {
 
         OutlinedButton(
             onClick = {
-                FirebaseAuth.getInstance().signOut()
-                val navController = GlobalNavigation.navController
-                navController.popBackStack()
-                navController.navigate("auth")
+                showLogoutDialog = true
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -131,5 +136,48 @@ fun ProfilePage(modifier: Modifier = Modifier) {
                 color = Color.White
             )
         }
+    }
+
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showLogoutDialog = false
+            },
+            title = {
+                Text(
+                    text = "Sign out",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text("Are you sure you want to sign out?")
+            },
+            confirmButton = {
+                Text(
+                    text = "Sign out",
+                    color = Color.Red,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            showLogoutDialog = false
+
+                            FirebaseAuth.getInstance().signOut()
+
+                            val navController = GlobalNavigation.navController
+                            navController.navigate("auth") {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = "Cancel",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable { showLogoutDialog = false }
+                )
+            }
+        )
     }
 }

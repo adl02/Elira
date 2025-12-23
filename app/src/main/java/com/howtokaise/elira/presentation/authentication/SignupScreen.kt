@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -54,7 +57,9 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController , a
         modifier = Modifier
             .fillMaxSize()
             .background(backgroundColor)
-            .padding(32.dp),
+            .padding(32.dp)
+            .imePadding()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -120,16 +125,34 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController , a
 
         Button(
             onClick = {
-                isLoading = true
-                authViewmodel.signup(email,name,password){success, errorMessage->
-                    if (success){
-                        isLoading = false
-                        navController.navigate("home"){
-                            popUpTo("auth"){inclusive = true}
+                when {
+                    email.isBlank() -> {
+                        AppUtil.showToast(context, "Email cannot be empty")
+                    }
+                    name.isBlank() -> {
+                        AppUtil.showToast(context, "Name cannot be empty")
+                    }
+                    password.isBlank() -> {
+                        AppUtil.showToast(context, "Password cannot be empty")
+                    }
+                    password.length < 6 -> {
+                        AppUtil.showToast(context, "Password must be at least 6 characters")
+                    }
+                    else -> {
+                        isLoading = true
+                        authViewmodel.signup(email, name, password) { success, errorMessage ->
+                            isLoading = false
+                            if (success) {
+                                navController.navigate("home") {
+                                    popUpTo("auth") { inclusive = true }
+                                }
+                            } else {
+                                AppUtil.showToast(
+                                    context,
+                                    errorMessage ?: "Something went wrong"
+                                )
+                            }
                         }
-                    }else{
-                        isLoading = false
-                        AppUtil.showToast(context,errorMessage?: "Something went wrong")
                     }
                 }
             },
